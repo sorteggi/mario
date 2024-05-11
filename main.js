@@ -1,8 +1,8 @@
 import './style.css';
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-
+import {getDatabase, ref, child, get , set ,update, remove} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDvvM6v5KTT5AWn0W1_xEU7WmYb32ycD08",
   authDomain: "came-54f87.firebaseapp.com",
@@ -179,8 +179,12 @@ answerButton.onclick = async () => {
   for (var i = 0; i < b.length; i ++) {
       b[i].style.display = 'none';
   }
-  
+  var c = document.getElementsById('container');
+  c.style.display = 'flex';
 };
+
+
+
 let toggleMic = async () => {
   let audioTrack = localStream.getTracks().find(track => track.kind === 'audio')
 
@@ -205,3 +209,67 @@ let toggleCamera = async () => {
   }
 }
 document.getElementById('camera-btn').addEventListener('click', toggleCamera)
+
+
+
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase();
+let x = 0;
+let y = 0;
+
+ const upBtn = document.getElementById('upBtn');
+ const downBtn = document.getElementById('downBtn');
+const leftBtn = document.getElementById('leftBtn');
+ const rightBtn = document.getElementById('rightBtn');
+function resetValues() {
+  set(ref(db, 'position'),{
+    xpos : 0,
+    ypos : 0
+  })  
+}
+ // Event listeners for mousedown and mouseup events
+  upBtn.addEventListener('mousedown', function() {
+    set(ref(db, 'position'),{
+      xpos : 0,
+      ypos : 1
+    }) 
+   });
+    downBtn.addEventListener('mousedown', function() {
+      set(ref(db, 'position'),{
+        xpos : 0,
+        ypos : -1
+      })  
+ });
+  leftBtn.addEventListener('mousedown', function() {
+    set(ref(db, 'position'),{
+      xpos : -1,
+      ypos : 0
+    }) 
+  });
+ rightBtn.addEventListener('mousedown', function() {
+  set(ref(db, 'position'),{
+    xpos : 1,
+    ypos : 0
+  }) 
+ });
+      upBtn.addEventListener('mouseup', resetValues);
+      downBtn.addEventListener('mouseup', resetValues);
+      leftBtn.addEventListener('mouseup', resetValues);
+      rightBtn.addEventListener('mouseup', resetValues);
+
+
+
+
+      let services = null;
+
+      document.getElementById("connect").onclick = async () => {
+          try {
+              const device = await microbit.requestMicrobit(window.navigator.bluetooth);
+              if (device) {
+                  services = await microbit.getServices(device);
+              }
+          } catch (error) {
+              log(`Error connecting`);
+          }
+      };
