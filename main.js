@@ -34,17 +34,17 @@ let localStream = null;
 let remoteStream = null;
 
 // HTML elements
-const webcamButton = document.getElementById('webcamButton');
 const webcamVideo = document.getElementById('webcamVideo');
 const callButton = document.getElementById('callButton');
 const callInput = document.getElementById('callInput');
 const answerButton = document.getElementById('answerButton');
 const remoteVideo = document.getElementById('remoteVideo');
-const hangupButton = document.getElementById('hangupButton');
+const callNameInput = document.getElementById('callNameInput');
 
 // 1. Setup media sources
 
-webcamButton.onclick = async () => {
+// 2. Create an offer
+callButton.onclick = async () => {
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();
 
@@ -62,16 +62,9 @@ webcamButton.onclick = async () => {
 
   webcamVideo.srcObject = localStream;
   remoteVideo.srcObject = remoteStream;
-
-  callButton.disabled = false;
-  answerButton.disabled = false;
-  webcamButton.disabled = true;
-};
-
-// 2. Create an offer
-callButton.onclick = async () => {
   // Reference Firestore collections for signaling
-  const callDoc = firestore.collection('calls').doc();
+  const callName = callNameInput.value;
+  const callDoc = firestore.collection('calls').doc(callName);
   const offerCandidates = callDoc.collection('offerCandidates');
   const answerCandidates = callDoc.collection('answerCandidates');
 
@@ -112,11 +105,37 @@ callButton.onclick = async () => {
     });
   });
 
-  hangupButton.disabled = false;
+  var v = document.getElementsByClassName('videos');
+
+  for (var i = 0; i < v.length; i ++) {
+      v[i].style.display = 'flex';
+  }
+  var b = document.getElementsByClassName('but');
+
+  for (var i = 0; i < b.length; i ++) {
+      b[i].style.display = 'none';
+  }
 };
 
 // 3. Answer the call with the unique ID
 answerButton.onclick = async () => {
+  localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  remoteStream = new MediaStream();
+
+  // Push tracks from local stream to peer connection
+  localStream.getTracks().forEach((track) => {
+    pc.addTrack(track, localStream);
+  });
+
+  // Pull tracks from remote stream, add to video stream
+  pc.ontrack = (event) => {
+    event.streams[0].getTracks().forEach((track) => {
+      remoteStream.addTrack(track);
+    });
+  };
+
+  webcamVideo.srcObject = localStream;
+  remoteVideo.srcObject = remoteStream;
   const callId = callInput.value;
   const callDoc = firestore.collection('calls').doc(callId);
   const answerCandidates = callDoc.collection('answerCandidates');
@@ -150,4 +169,39 @@ answerButton.onclick = async () => {
       }
     });
   });
+  var v = document.getElementsByClassName('videos');
+
+  for (var i = 0; i < v.length; i ++) {
+      v[i].style.display = 'flex';
+  }
+  var b = document.getElementsByClassName('but');
+
+  for (var i = 0; i < b.length; i ++) {
+      b[i].style.display = 'none';
+  }
+  
 };
+let toggleMic = async () => {
+  let audioTrack = localStream.getTracks().find(track => track.kind === 'audio')
+
+  if(audioTrack.enabled){
+      audioTrack.enabled = false
+      document.getElementById('mic-btn').style.backgroundColor = 'rgb(255, 80, 80)'
+  }else{
+      audioTrack.enabled = true
+      document.getElementById('mic-btn').style.backgroundColor = 'white'
+  }
+}
+document.getElementById('mic-btn').addEventListener('click', toggleMic)
+let toggleCamera = async () => {
+  let videoTrack = localStream.getTracks().find(track => track.kind === 'video')
+
+  if(videoTrack.enabled){
+      videoTrack.enabled = false
+      document.getElementById('camera-btn').style.backgroundColor = 'rgb(255, 80, 80)'
+  }else{
+      videoTrack.enabled = true
+      document.getElementById('camera-btn').style.backgroundColor = 'white'
+  }
+}
+document.getElementById('camera-btn').addEventListener('click', toggleCamera)
