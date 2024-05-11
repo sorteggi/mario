@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/microbit-web-bluetooth/dist/microbit.umd.js"></script>
     <title>WebRTC Demo</title>
   </head>
   <body>
@@ -31,8 +32,17 @@
     <div class="videos">
       <button id="mic-btn">mute mic</button>
       <button id="camera-btn">disable camera</button>
+      <button id="connect">Connect</button>
    </div>
     <script type="module" src="/main.js"></script>
+    <div class="videos">
+
+      <!-- Direction buttons with arrows -->
+      <button id="upBtn">↑</button><br>
+      <button id="leftBtn">←</button>
+      <button id="downBtn">↓</button>
+      <button id="rightBtn">→</button>
+  </div>
 
   </body>
 </html>
