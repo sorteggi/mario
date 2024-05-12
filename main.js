@@ -2,7 +2,7 @@ import './style.css';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import {getDatabase, ref, child, get , set ,update, remove} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+import {getDatabase, ref, onValue, get , set ,update, remove} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDvvM6v5KTT5AWn0W1_xEU7WmYb32ycD08",
   authDomain: "came-54f87.firebaseapp.com",
@@ -34,18 +34,23 @@ let localStream = null;
 let remoteStream = null;
 
 // HTML elements
-const webcamVideo = document.getElementById('webcamVideo');
+const webcamVideo = document.getElementById('user-1');
 const callButton = document.getElementById('callButton');
 const callInput = document.getElementById('callInput');
 const answerButton = document.getElementById('answerButton');
-const remoteVideo = document.getElementById('remoteVideo');
+const remoteVideo = document.getElementById('user-2');
 const callNameInput = document.getElementById('callNameInput');
-
-// 1. Setup media sources
+let constraints = {
+    video:{
+        width:{min:640, ideal:1920, max:1920},
+        height:{min:480, ideal:1080, max:1080},
+    },
+    audio:true
+}
 
 // 2. Create an offer
 callButton.onclick = async () => {
-  localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  localStream = await navigator.mediaDevices.getUserMedia(constraints);
   remoteStream = new MediaStream();
 
   // Push tracks from local stream to peer connection
@@ -92,6 +97,10 @@ callButton.onclick = async () => {
     if (!pc.currentRemoteDescription && data?.answer) {
       const answerDescription = new RTCSessionDescription(data.answer);
       pc.setRemoteDescription(answerDescription);
+      document.getElementById('user-2').srcObject = remoteStream
+      document.getElementById('user-2').style.display = 'block'
+
+      document.getElementById('user-1').classList.add('smallFrame')
     }
   });
 
@@ -104,23 +113,19 @@ callButton.onclick = async () => {
       }
     });
   });
-
-  var v = document.getElementsByClassName('videos');
-
-  for (var i = 0; i < v.length; i ++) {
-      v[i].style.display = 'flex';
-  }
-  var b = document.getElementsByClassName('but');
-
-  for (var i = 0; i < b.length; i ++) {
-      b[i].style.display = 'none';
-  }
+  document.getElementById("videos").style.display = "grid";
+  document.getElementById("controls").style.display = "flex";
+  document.getElementById("lobby").style.display = "none";
 };
 
 // 3. Answer the call with the unique ID
 answerButton.onclick = async () => {
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();
+  document.getElementById('user-2').srcObject = remoteStream
+      document.getElementById('user-2').style.display = 'block'
+
+      document.getElementById('user-1').classList.add('smallFrame')
 
   // Push tracks from local stream to peer connection
   localStream.getTracks().forEach((track) => {
@@ -169,18 +174,9 @@ answerButton.onclick = async () => {
       }
     });
   });
-  var v = document.getElementsByClassName('videos');
-
-  for (var i = 0; i < v.length; i ++) {
-      v[i].style.display = 'flex';
-  }
-  var b = document.getElementsByClassName('but');
-
-  for (var i = 0; i < b.length; i ++) {
-      b[i].style.display = 'none';
-  }
-  var c = document.getElementsById('container');
-  c.style.display = 'flex';
+  document.getElementById("videos").style.display = "grid";
+  document.getElementById("controls").style.display = "flex";
+  document.getElementById("lobby").style.display = "none";
 };
 
 
@@ -193,7 +189,7 @@ let toggleMic = async () => {
       document.getElementById('mic-btn').style.backgroundColor = 'rgb(255, 80, 80)'
   }else{
       audioTrack.enabled = true
-      document.getElementById('mic-btn').style.backgroundColor = 'white'
+      document.getElementById('mic-btn').style.backgroundColor = 'rgb(179, 102, 249, .9)'
   }
 }
 document.getElementById('mic-btn').addEventListener('click', toggleMic)
@@ -205,10 +201,15 @@ let toggleCamera = async () => {
       document.getElementById('camera-btn').style.backgroundColor = 'rgb(255, 80, 80)'
   }else{
       videoTrack.enabled = true
-      document.getElementById('camera-btn').style.backgroundColor = 'white'
+      document.getElementById('camera-btn').style.backgroundColor = 'rgb(179, 102, 249, .9)'
   }
 }
 document.getElementById('camera-btn').addEventListener('click', toggleCamera)
+
+let leave = async () => {
+  window.history.back();
+}
+document.getElementById('leave-btn').addEventListener('click', leave)
 
 
 
@@ -273,3 +274,25 @@ function resetValues() {
               log(`Error connecting`);
           }
       };
+      const positionRef = ref(db, 'position');
+
+      // Listen for changes to the 'position' node
+      onValue(positionRef, (snapshot) => {
+        const position = snapshot.val();
+        // Extract the values of xpos and ypos
+        const { xpos, ypos } = position;
+        // Create a space-separated string of the values
+        const text = `${xpos} ${ypos}`;
+        // Do something with the position string
+        if (services && services.uartService && text) {
+          // Append newline character (\n) to the input text
+          const textWithNewline = text + "\n";		
+      
+          // Convert the input text (with newline) to Uint8Array
+          const encoder = new TextEncoder();
+          const encodedText = encoder.encode(textWithNewline);
+      
+          // Send the encoded text to the micro:bit asynchronously
+          services.uartService.send(encodedText)
+        }
+      });
