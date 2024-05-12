@@ -7,42 +7,51 @@
     <title>WebRTC Demo</title>
   </head>
   <body>
-    <div class="videos">
-      <span>
-        <h3>Local Stream</h3>
-        <video id="webcamVideo" autoplay playsinline muted></video>
-      </span>
-      <span>
-        <h3>Remote Stream</h3>
-        <video id="remoteVideo" autoplay playsinline></video>
-      </span>
 
-
+    <div id="videos">
+        <video class="video-player" id="user-1" autoplay playsinline muted></video>
+        <video class="video-player" id="user-2" autoplay playsinline></video>
     </div>
-    <div class="but">
-      <h2> Create a new Call</h2>
-      <input id="callNameInput" type="text" placeholder="Enter call name...">
-      <button id="callButton">Create Call</button>
 
-      <h2> Join a Call</h2>
-      
-      <input id="callInput" placeholder="Enter call name..."/>
-      <button id="answerButton">Join Call</button>
+
+    <div id="lobby">
+      <h2 class="lob"> Create a new Call</h2>
+      <input class="lob" id="callNameInput" type="text" placeholder="Enter call name...">
+      <button class="lob" id="callButton">Create Call</button>
+      <h2 class="lob"> Join a Call</h2>
+      <input class="lob" id="callInput" placeholder="Enter call name..."/>
+      <button class="lob" id="answerButton">Join Call</button>
     </div>
-    <div class="videos">
-      <button id="mic-btn">mute mic</button>
-      <button id="camera-btn">disable camera</button>
-      <button id="connect">Connect</button>
-   </div>
+
+
+    <div id="controls">
+      <div class="control-container" id="camera-btn">
+        <img src="camera.png" />
+      </div>
+
+      <div class="control-container" id="mic-btn">
+        <img src="mic.png" />
+      </div>
+      <div class="control-container" id="connect">
+        <img src="microbit.png" />
+      </div>
+      <div class="control-container" id="upBtn">
+        <img src="up.png" />
+      </div>
+      <div class="control-container" id="leftBtn">
+        <img src="left.png" />
+      </div>
+      <div class="control-container" id="downBtn">
+        <img src="down.png" />
+      </div>
+      <div class="control-container" id="rightBtn">
+        <img src="right.png" />
+      </div>
+      <div class="control-container" id="leave-btn">
+        <img src="phone.png" />
+    </div>
+    </div>
+
     <script type="module" src="/main.js"></script>
-    <div class="videos">
-
-      <!-- Direction buttons with arrows -->
-      <button id="upBtn">↑</button><br>
-      <button id="leftBtn">←</button>
-      <button id="downBtn">↓</button>
-      <button id="rightBtn">→</button>
-  </div>
-
   </body>
 </html>
