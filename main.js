@@ -22,7 +22,7 @@ const firestore = firebase.firestore();
 const servers = {
   iceServers: [
     {
-      urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'],
+      urls: ['stun:stun1.l.google.com:19302','turn:turn.anyfirewall.com:443?transport=tcp', 'stun:stun2.l.google.com:19302'],
     },
   ],
   iceCandidatePoolSize: 10,
