@@ -21,14 +21,29 @@ const firestore = firebase.firestore();
 
 const servers = {
   iceServers: [
-    {
-      urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302'],
-    },
-    {
-      urls: 'turn:turn.bistri.com:80',
-      username: 'homeo',
-      credential: 'homeo'
-    },
+      {
+        urls: "stun:stun.relay.metered.ca:80",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80",
+        username: "2c3aa117302271930f1579ad",
+        credential: "+FeaZyhms/3RRQ9O",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80?transport=tcp",
+        username: "2c3aa117302271930f1579ad",
+        credential: "+FeaZyhms/3RRQ9O",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:443",
+        username: "2c3aa117302271930f1579ad",
+        credential: "+FeaZyhms/3RRQ9O",
+      },
+      {
+        urls: "turns:global.relay.metered.ca:443?transport=tcp",
+        username: "2c3aa117302271930f1579ad",
+        credential: "+FeaZyhms/3RRQ9O",
+      },
   ],
   iceCandidatePoolSize: 10,
 };
