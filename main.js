@@ -21,29 +21,16 @@ const firestore = firebase.firestore();
 
 const servers = {
   iceServers: [
-      {
-        urls: "stun:stun.relay.metered.ca:80",
-      },
-      {
-        urls: "turn:global.relay.metered.ca:80",
-        username: "2c3aa117302271930f1579ad",
-        credential: "+FeaZyhms/3RRQ9O",
-      },
-      {
-        urls: "turn:global.relay.metered.ca:80?transport=tcp",
-        username: "2c3aa117302271930f1579ad",
-        credential: "+FeaZyhms/3RRQ9O",
-      },
-      {
-        urls: "turn:global.relay.metered.ca:443",
-        username: "2c3aa117302271930f1579ad",
-        credential: "+FeaZyhms/3RRQ9O",
-      },
-      {
-        urls: "turns:global.relay.metered.ca:443?transport=tcp",
-        username: "2c3aa117302271930f1579ad",
-        credential: "+FeaZyhms/3RRQ9O",
-      },
+      { urls: "stun:stun.l.google.com:19302" },
+    { urls: "stun:stun.services.mozilla.com:3478" },
+    { urls: "stun:stun.twilio.com:3478" },
+    // Add more STUN servers here following the same format
+    { urls: "stun:stun.cisco.com:19302" },
+    { urls: "stun:stun.stunserver.org:3478" },
+    { urls: "stun:stun.matrix.org:3478" },
+    { urls: "stun:stun.opencn.com:3478" },
+    { urls: "stun:stun.voipstunt.com:3478" },
+    { urls: "stun:stun.callwithus.com:3478" }
   ],
   iceCandidatePoolSize: 10,
 };
