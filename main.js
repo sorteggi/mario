@@ -25,7 +25,7 @@ const servers = {
       urls: 'stun:freeturn.net:5349'
     },
     {
-      urls: "turn:freeturn.tel:3478",
+      urls: "TURN:freeturn.tel:3478",
       username: "free",
       credential: "free",
     },
