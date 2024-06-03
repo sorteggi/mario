@@ -22,9 +22,6 @@ const firestore = firebase.firestore();
 const servers = {
   iceServers: [
     {
-      urls: 'stun:freeturn.net:5349'
-    },
-    {
       urls: "TURN:freeturn.tel:3478",
       username: "free",
       credential: "free",
