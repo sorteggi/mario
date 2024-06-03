@@ -21,16 +21,7 @@ const firestore = firebase.firestore();
 
 const servers = {
   iceServers: [
-      { urls: "stun:stun.l.google.com:19302" },
-    { urls: "stun:stun.services.mozilla.com:3478" },
-    { urls: "stun:stun.twilio.com:3478" },
-    // Add more STUN servers here following the same format
-    { urls: "stun:stun.cisco.com:19302" },
-    { urls: "stun:stun.stunserver.org:3478" },
-    { urls: "stun:stun.matrix.org:3478" },
-    { urls: "stun:stun.opencn.com:3478" },
-    { urls: "stun:stun.voipstunt.com:3478" },
-    { urls: "stun:stun.callwithus.com:3478" }
+    { urls: 'turns:freeturn.tel:5349', username: 'free', credential: 'free' } 
   ],
   iceCandidatePoolSize: 10,
 };
