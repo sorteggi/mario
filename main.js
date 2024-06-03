@@ -20,9 +20,7 @@ if (!firebase.apps.length) {
 const firestore = firebase.firestore();
 
 const servers = {
-  iceServers: [
-    { urls: 'turns:freeturn.tel:5349', username: 'free', credential: 'free' } 
-  ],
+  [ { urls: 'stun:freeturn.net:5349' }, { urls: 'turns:freeturn.tel:5349', username: 'free', credential: 'free' },{urls: 'TURN:freeturn.net:3478', username: 'free' , credential: 'free} ]
   iceCandidatePoolSize: 10,
 };
 
